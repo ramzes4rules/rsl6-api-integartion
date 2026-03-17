@@ -437,3 +437,798 @@ type APIError struct {
 func (e *APIError) Error() string {
 	return e.Message
 }
+
+// ========== CustomerCards Commands ==========
+
+// BindLoyaltyCardRequest represents request for binding loyalty card to customer
+type BindLoyaltyCardRequest struct {
+	BaseCommand
+	LoyaltyCardID      uuid.UUID `json:"loyaltyCardId"`
+	PinCode            *string   `json:"pinCode,omitempty"`
+	InteractionChannel *string   `json:"interactionChannel,omitempty"`
+}
+
+// UnbindLoyaltyCardRequest represents request for unbinding loyalty card from customer
+type UnbindLoyaltyCardRequest struct {
+	BaseCommand
+	LoyaltyCardID uuid.UUID `json:"loyaltyCardId"`
+}
+
+// CustomerCardsBatchRequest represents batch request for customer cards commands
+type CustomerCardsBatchRequest struct {
+	Commands []interface{} `json:"commands"`
+}
+
+// ========== CustomerProperty Commands ==========
+
+// CreateCustomerPropertyRequest represents request for creating customer property
+type CreateCustomerPropertyRequest struct {
+	BaseCommand
+	Name       *string               `json:"name,omitempty"`
+	Type       CustomerPropertyTypes `json:"type"`
+	ExternalID *string               `json:"externalId,omitempty"`
+}
+
+// RenameCustomerPropertyRequest represents request for renaming customer property
+type RenameCustomerPropertyRequest struct {
+	BaseCommand
+	Name *string `json:"name,omitempty"`
+}
+
+// DeleteCustomerPropertyRequest represents request for deleting customer property
+type DeleteCustomerPropertyRequest struct {
+	BaseCommand
+}
+
+// RestoreCustomerPropertyRequest represents request for restoring customer property
+type RestoreCustomerPropertyRequest struct {
+	BaseCommand
+}
+
+// AddEnumCustomerPropertyRequest represents request for adding enum value to customer property
+type AddEnumCustomerPropertyRequest struct {
+	BaseCommand
+	EnumValueID uuid.UUID `json:"enumValueId"`
+	Name        *string   `json:"name,omitempty"`
+}
+
+// RenameEnumCustomerPropertyRequest represents request for renaming enum value of customer property
+type RenameEnumCustomerPropertyRequest struct {
+	BaseCommand
+	EnumValueID uuid.UUID `json:"enumValueId"`
+	Name        *string   `json:"name,omitempty"`
+}
+
+// DeleteEnumCustomerPropertyRequest represents request for deleting enum value from customer property
+type DeleteEnumCustomerPropertyRequest struct {
+	BaseCommand
+	EnumValueID uuid.UUID `json:"enumValueId"`
+}
+
+// RestoreEnumCustomerPropertyRequest represents request for restoring enum value of customer property
+type RestoreEnumCustomerPropertyRequest struct {
+	BaseCommand
+	EnumValueID uuid.UUID `json:"enumValueId"`
+}
+
+// CustomerPropertyBatchRequest represents batch request for customer property commands
+type CustomerPropertyBatchRequest struct {
+	Commands []interface{} `json:"commands"`
+}
+
+// PropertyDefinitionDto represents customer property definition
+type PropertyDefinitionDto struct {
+	ID        uuid.UUID              `json:"id"`
+	Type      CustomerPropertyTypes  `json:"type"`
+	Name      *string                `json:"name,omitempty"`
+	IsDeleted bool                   `json:"isDeleted"`
+	Enums     []EnumPropertyValueDto `json:"enums,omitempty"`
+}
+
+// EnumPropertyValueDto represents enum property value
+type EnumPropertyValueDto struct {
+	ID        uuid.UUID `json:"id"`
+	Name      *string   `json:"name,omitempty"`
+	IsDeleted bool      `json:"isDeleted"`
+}
+
+// PropertyDefinitionListDto represents list of customer property definitions
+type PropertyDefinitionListDto struct {
+	Total  int64                   `json:"total"`
+	Values []PropertyDefinitionDto `json:"values"`
+}
+
+// ========== CustomerSegment Commands ==========
+
+// AddToStaticSegmentRequest represents request for adding customer to static segment
+type AddToStaticSegmentRequest struct {
+	BaseCommand
+	StaticSegmentID uuid.UUID `json:"staticSegmentId"`
+}
+
+// RemoveFromStaticSegmentRequest represents request for removing customer from static segment
+type RemoveFromStaticSegmentRequest struct {
+	BaseCommand
+	StaticSegmentID uuid.UUID `json:"staticSegmentId"`
+}
+
+// CustomerSegmentBatchRequest represents batch request for customer segment commands
+type CustomerSegmentBatchRequest struct {
+	Commands []interface{} `json:"commands"`
+}
+
+// ========== Common Request Types ==========
+
+// DeleteRequest represents a generic delete request
+type DeleteRequest struct {
+	BaseCommand
+}
+
+// RestoreRequest represents a generic restore request
+type RestoreRequest struct {
+	BaseCommand
+}
+
+// MoveToArchiveRequest represents a generic move to archive request
+type MoveToArchiveRequest struct {
+	BaseCommand
+}
+
+// UnarchiveRequest represents a generic unarchive request
+type UnarchiveRequest struct {
+	BaseCommand
+}
+
+// RenameRequest represents a generic rename request
+type RenameRequest struct {
+	BaseCommand
+	Name string `json:"name"`
+}
+
+// SetDescriptionRequest represents a generic set description request
+type SetDescriptionRequest struct {
+	BaseCommand
+	Description string `json:"description"`
+}
+
+// SetColorRequest represents a generic set color request
+type SetColorRequest struct {
+	BaseCommand
+	Color string `json:"color"`
+}
+
+// SetParentRequest represents a generic set parent request
+type SetParentRequest struct {
+	BaseCommand
+	ParentID *uuid.UUID `json:"parentId,omitempty"`
+}
+
+// ========== External Card Series ==========
+
+// CreateExternalGiftCardSeriesRequest represents request for creating external gift card series
+type CreateExternalGiftCardSeriesRequest struct {
+	BaseCommand
+	Name string `json:"name"`
+}
+
+// CreateExternalLoyaltyCardSeriesRequest represents request for creating external loyalty card series
+type CreateExternalLoyaltyCardSeriesRequest struct {
+	BaseCommand
+	Name string `json:"name"`
+}
+
+// CreateExternalSponsoredCardSeriesRequest represents request for creating external sponsored card series
+type CreateExternalSponsoredCardSeriesRequest struct {
+	BaseCommand
+	Name string `json:"name"`
+}
+
+// RenameExternalCardSeriesRequest represents request for renaming external card series
+type RenameExternalCardSeriesRequest struct {
+	BaseCommand
+	Name string `json:"name"`
+}
+
+// AddCirculationRequest represents request for adding circulation to external card series
+type AddCirculationRequest struct {
+	BaseCommand
+	CirculationID uuid.UUID `json:"circulationId"`
+	Name          string    `json:"name"`
+}
+
+// RenameCirculationRequest represents request for renaming circulation
+type RenameCirculationRequest struct {
+	BaseCommand
+	CirculationID uuid.UUID `json:"circulationId"`
+	Name          string    `json:"name"`
+}
+
+// ExternalCardSeriesDto represents external card series data
+type ExternalCardSeriesDto struct {
+	ID           uuid.UUID                    `json:"id"`
+	Name         string                       `json:"name"`
+	IsDeleted    bool                         `json:"isDeleted"`
+	Circulations []ExternalCardCirculationDto `json:"circulations,omitempty"`
+}
+
+// ExternalCardCirculationDto represents external card circulation data
+type ExternalCardCirculationDto struct {
+	ID   uuid.UUID `json:"id"`
+	Name string    `json:"name"`
+}
+
+// ExternalCardSeriesListDto represents list of external card series
+type ExternalCardSeriesListDto struct {
+	Total  int64                   `json:"total"`
+	Values []ExternalCardSeriesDto `json:"values"`
+}
+
+// ========== Gift Cards ==========
+
+// GiftCardStatuses represents gift card status
+type GiftCardStatuses string
+
+const (
+	GiftCardStatusCreated       GiftCardStatuses = "Created"
+	GiftCardStatusReadyToIssued GiftCardStatuses = "ReadyToIssued"
+	GiftCardStatusIssued        GiftCardStatuses = "Issued"
+	GiftCardStatusActive        GiftCardStatuses = "Active"
+	GiftCardStatusBlocked       GiftCardStatuses = "Blocked"
+	GiftCardStatusExpired       GiftCardStatuses = "Expired"
+	GiftCardStatusFullyRedeemed GiftCardStatuses = "FullyRedeemed"
+)
+
+// CreateGiftCardRequest represents request for creating a gift card
+type CreateGiftCardRequest struct {
+	BaseCommand
+	SeriesID uuid.UUID `json:"seriesId"`
+}
+
+// SetCardNumberRequest represents request for setting card number
+type SetCardNumberRequest struct {
+	BaseCommand
+	Number string `json:"number"`
+}
+
+// SetCardBarcodeRequest represents request for setting card barcode
+type SetCardBarcodeRequest struct {
+	BaseCommand
+	Barcode string `json:"barcode"`
+}
+
+// SetCardPinCodeRequest represents request for setting card pin code
+type SetCardPinCodeRequest struct {
+	BaseCommand
+	PinCode string `json:"pinCode"`
+}
+
+// SetCardExpirationDateRequest represents request for setting card expiration date
+type SetCardExpirationDateRequest struct {
+	BaseCommand
+	ExpirationDate *time.Time `json:"expirationDate,omitempty"`
+}
+
+// SetGiftCardValidityPeriodRequest represents request for setting gift card validity period
+type SetGiftCardValidityPeriodRequest struct {
+	BaseCommand
+	ValidityPeriod int `json:"validityPeriod"`
+}
+
+// ConfirmReadinessForIssuanceRequest represents request for confirming readiness for issuance
+type ConfirmReadinessForIssuanceRequest struct {
+	BaseCommand
+}
+
+// IssueGiftCardRequest represents request for issuing a gift card
+type IssueGiftCardRequest struct {
+	BaseCommand
+	Amount        float64    `json:"amount"`
+	IssueReasonID *uuid.UUID `json:"issueReasonId,omitempty"`
+}
+
+// CancelIssueRequest represents request for canceling card issue
+type CancelIssueRequest struct {
+	BaseCommand
+}
+
+// BlockGiftCardRequest represents request for blocking a gift card
+type BlockGiftCardRequest struct {
+	BaseCommand
+	BlockReasonID *uuid.UUID `json:"blockReasonId,omitempty"`
+}
+
+// UnblockCardRequest represents request for unblocking a card
+type UnblockCardRequest struct {
+	BaseCommand
+}
+
+// SubtractGiftCardRequest represents request for subtracting from gift card
+type SubtractGiftCardRequest struct {
+	BaseCommand
+	Amount float64 `json:"amount"`
+}
+
+// RefundGiftCardRequest represents request for refunding to gift card
+type RefundGiftCardRequest struct {
+	BaseCommand
+	Amount float64 `json:"amount"`
+}
+
+// AddCardGroupRequest represents request for adding card to group
+type AddCardGroupRequest struct {
+	BaseCommand
+	GroupID uuid.UUID `json:"groupId"`
+}
+
+// RemoveCardGroupRequest represents request for removing card from group
+type RemoveCardGroupRequest struct {
+	BaseCommand
+	GroupID uuid.UUID `json:"groupId"`
+}
+
+// GiftCardDto represents gift card data
+type GiftCardDto struct {
+	ID             uuid.UUID        `json:"id"`
+	Number         string           `json:"number"`
+	Barcode        *string          `json:"barcode,omitempty"`
+	SeriesID       uuid.UUID        `json:"seriesId"`
+	Status         GiftCardStatuses `json:"status"`
+	Balance        float64          `json:"balance"`
+	InitialAmount  float64          `json:"initialAmount"`
+	IssueDate      *time.Time       `json:"issueDate,omitempty"`
+	ExpirationDate *time.Time       `json:"expirationDate,omitempty"`
+	IsDeleted      bool             `json:"isDeleted"`
+	Groups         []uuid.UUID      `json:"groups,omitempty"`
+}
+
+// GiftCardListDto represents list of gift cards
+type GiftCardListDto struct {
+	Total  int64         `json:"total"`
+	Values []GiftCardDto `json:"values"`
+}
+
+// ========== Reasons (Block, Issue, Manual Accrual) ==========
+
+// CreateReasonRequest represents request for creating a reason
+type CreateReasonRequest struct {
+	BaseCommand
+	Name string `json:"name"`
+}
+
+// ReasonDto represents reason data
+type ReasonDto struct {
+	ID         uuid.UUID `json:"id"`
+	Name       string    `json:"name"`
+	IsDeleted  bool      `json:"isDeleted"`
+	IsArchived bool      `json:"isArchived"`
+}
+
+// ReasonListDto represents list of reasons
+type ReasonListDto struct {
+	Total  int64       `json:"total"`
+	Values []ReasonDto `json:"values"`
+}
+
+// ========== Groups (Card Groups) ==========
+
+// CreateGroupRequest represents request for creating a group
+type CreateGroupRequest struct {
+	BaseCommand
+	Name string `json:"name"`
+}
+
+// GroupDto represents group data
+type GroupDto struct {
+	ID         uuid.UUID `json:"id"`
+	Name       string    `json:"name"`
+	Color      *string   `json:"color,omitempty"`
+	IsDeleted  bool      `json:"isDeleted"`
+	IsArchived bool      `json:"isArchived"`
+}
+
+// GroupListDto represents list of groups
+type GroupListDto struct {
+	Total  int64      `json:"total"`
+	Values []GroupDto `json:"values"`
+}
+
+// ========== Items ==========
+
+// CreateItemRequest represents request for creating an item
+type CreateItemRequest struct {
+	BaseCommand
+	Name string `json:"name"`
+}
+
+// SetPublicNameRequest represents request for setting public name
+type SetPublicNameRequest struct {
+	BaseCommand
+	PublicName string `json:"publicName"`
+}
+
+// SetArticleRequest represents request for setting article
+type SetArticleRequest struct {
+	BaseCommand
+	Article string `json:"article"`
+}
+
+// SetExternalIDRequest represents request for setting external ID
+type SetExternalIDRequest struct {
+	BaseCommand
+	ExternalID string `json:"externalId"`
+}
+
+// SetItemGroupIDRequest represents request for setting item group ID
+type SetItemGroupIDRequest struct {
+	BaseCommand
+	ItemGroupID *uuid.UUID `json:"itemGroupId,omitempty"`
+}
+
+// SetRestrictionRequest represents request for setting restriction
+type SetRestrictionRequest struct {
+	BaseCommand
+	Restriction string `json:"restriction"`
+}
+
+// SetBooleanPropertyValueRequest represents request for setting boolean property value
+type SetBooleanPropertyValueRequest struct {
+	BaseCommand
+	PropertyID uuid.UUID `json:"propertyId"`
+	Value      bool      `json:"value"`
+}
+
+// SetIntPropertyValueRequest represents request for setting int property value
+type SetIntPropertyValueRequest struct {
+	BaseCommand
+	PropertyID uuid.UUID `json:"propertyId"`
+	Value      int       `json:"value"`
+}
+
+// SetStringPropertyValueRequest represents request for setting string property value
+type SetStringPropertyValueRequest struct {
+	BaseCommand
+	PropertyID uuid.UUID `json:"propertyId"`
+	Value      string    `json:"value"`
+}
+
+// SetDatePropertyValueRequest represents request for setting date property value
+type SetDatePropertyValueRequest struct {
+	BaseCommand
+	PropertyID uuid.UUID `json:"propertyId"`
+	Value      string    `json:"value"`
+}
+
+// SetEnumPropertyValueRequest represents request for setting enum property value
+type SetEnumPropertyValueRequest struct {
+	BaseCommand
+	PropertyID uuid.UUID `json:"propertyId"`
+	Value      uuid.UUID `json:"value"`
+}
+
+// SetEnumsPropertyValueRequest represents request for setting multiple enum property values
+type SetEnumsPropertyValueRequest struct {
+	BaseCommand
+	PropertyID uuid.UUID   `json:"propertyId"`
+	Values     []uuid.UUID `json:"values"`
+}
+
+// AddMediaContentRequest represents request for adding media content
+type AddMediaContentRequest struct {
+	BaseCommand
+	MediaContentID uuid.UUID `json:"mediaContentId"`
+	Name           string    `json:"name"`
+	Source         string    `json:"source"`
+	Type           string    `json:"type"`
+}
+
+// RemoveMediaContentRequest represents request for removing media content
+type RemoveMediaContentRequest struct {
+	BaseCommand
+	MediaContentID uuid.UUID `json:"mediaContentId"`
+}
+
+// RenameMediaContentRequest represents request for renaming media content
+type RenameMediaContentRequest struct {
+	BaseCommand
+	MediaContentID uuid.UUID `json:"mediaContentId"`
+	Name           string    `json:"name"`
+}
+
+// SetMediaContentSourceRequest represents request for setting media content source
+type SetMediaContentSourceRequest struct {
+	BaseCommand
+	MediaContentID uuid.UUID `json:"mediaContentId"`
+	Source         string    `json:"source"`
+}
+
+// SetMediaContentTypeRequest represents request for setting media content type
+type SetMediaContentTypeRequest struct {
+	BaseCommand
+	MediaContentID uuid.UUID `json:"mediaContentId"`
+	Type           string    `json:"type"`
+}
+
+// SetDefaultImageRequest represents request for setting default image
+type SetDefaultImageRequest struct {
+	BaseCommand
+	MediaContentID uuid.UUID `json:"mediaContentId"`
+}
+
+// ClearDefaultImageRequest represents request for clearing default image
+type ClearDefaultImageRequest struct {
+	BaseCommand
+}
+
+// AddSaleItemRequest represents request for adding sale item
+type AddSaleItemRequest struct {
+	BaseCommand
+	SaleItemID uuid.UUID `json:"saleItemId"`
+	ExternalID string    `json:"externalId"`
+}
+
+// DeleteSaleItemRequest represents request for deleting sale item
+type DeleteSaleItemRequest struct {
+	BaseCommand
+	SaleItemID uuid.UUID `json:"saleItemId"`
+}
+
+// RestoreSaleItemRequest represents request for restoring sale item
+type RestoreSaleItemRequest struct {
+	BaseCommand
+	SaleItemID uuid.UUID `json:"saleItemId"`
+}
+
+// SetSaleItemExternalIDRequest represents request for setting sale item external ID
+type SetSaleItemExternalIDRequest struct {
+	BaseCommand
+	SaleItemID uuid.UUID `json:"saleItemId"`
+	ExternalID string    `json:"externalId"`
+}
+
+// SetSaleItemPropertyValueRequest represents request for setting sale item property value
+type SetSaleItemPropertyValueRequest struct {
+	BaseCommand
+	SaleItemID uuid.UUID   `json:"saleItemId"`
+	PropertyID uuid.UUID   `json:"propertyId"`
+	Value      interface{} `json:"value"`
+}
+
+// ItemDto represents item data
+type ItemDto struct {
+	ID          uuid.UUID  `json:"id"`
+	Name        string     `json:"name"`
+	PublicName  *string    `json:"publicName,omitempty"`
+	Description *string    `json:"description,omitempty"`
+	Article     *string    `json:"article,omitempty"`
+	ExternalID  *string    `json:"externalId,omitempty"`
+	ItemGroupID *uuid.UUID `json:"itemGroupId,omitempty"`
+	IsDeleted   bool       `json:"isDeleted"`
+}
+
+// ItemListDto represents list of items
+type ItemListDto struct {
+	Total  int64     `json:"total"`
+	Values []ItemDto `json:"values"`
+}
+
+// ========== Item Categories ==========
+
+// CreateItemCategoryRequest represents request for creating an item category
+type CreateItemCategoryRequest struct {
+	BaseCommand
+	Name string `json:"name"`
+}
+
+// AddItemToCategoryRequest represents request for adding item to category
+type AddItemToCategoryRequest struct {
+	BaseCommand
+	ItemID uuid.UUID `json:"itemId"`
+}
+
+// RemoveItemFromCategoryRequest represents request for removing item from category
+type RemoveItemFromCategoryRequest struct {
+	BaseCommand
+	ItemID uuid.UUID `json:"itemId"`
+}
+
+// AddItemGroupToCategoryRequest represents request for adding item group to category
+type AddItemGroupToCategoryRequest struct {
+	BaseCommand
+	ItemGroupID uuid.UUID `json:"itemGroupId"`
+}
+
+// RemoveItemGroupFromCategoryRequest represents request for removing item group from category
+type RemoveItemGroupFromCategoryRequest struct {
+	BaseCommand
+	ItemGroupID uuid.UUID `json:"itemGroupId"`
+}
+
+// ItemCategoryDto represents item category data
+type ItemCategoryDto struct {
+	ID          uuid.UUID   `json:"id"`
+	Name        string      `json:"name"`
+	Description *string     `json:"description,omitempty"`
+	Color       *string     `json:"color,omitempty"`
+	IsDeleted   bool        `json:"isDeleted"`
+	IsArchived  bool        `json:"isArchived"`
+	Items       []uuid.UUID `json:"items,omitempty"`
+	ItemGroups  []uuid.UUID `json:"itemGroups,omitempty"`
+}
+
+// ItemCategoryListDto represents list of item categories
+type ItemCategoryListDto struct {
+	Total  int64             `json:"total"`
+	Values []ItemCategoryDto `json:"values"`
+}
+
+// ========== Item Groups ==========
+
+// CreateItemGroupRequest represents request for creating an item group
+type CreateItemGroupRequest struct {
+	BaseCommand
+	Name string `json:"name"`
+}
+
+// ItemGroupDto represents item group data
+type ItemGroupDto struct {
+	ID        uuid.UUID  `json:"id"`
+	Name      string     `json:"name"`
+	ParentID  *uuid.UUID `json:"parentId,omitempty"`
+	IsDeleted bool       `json:"isDeleted"`
+}
+
+// ItemGroupListDto represents list of item groups
+type ItemGroupListDto struct {
+	Total  int64          `json:"total"`
+	Values []ItemGroupDto `json:"values"`
+}
+
+// ========== Item Properties ==========
+
+// CreateItemPropertyRequest represents request for creating an item property
+type CreateItemPropertyRequest struct {
+	BaseCommand
+	Name string                `json:"name"`
+	Type CustomerPropertyTypes `json:"type"`
+}
+
+// AddEnumRequest represents request for adding enum value
+type AddEnumRequest struct {
+	BaseCommand
+	EnumValueID uuid.UUID `json:"enumValueId"`
+	Name        string    `json:"name"`
+}
+
+// RenameEnumRequest represents request for renaming enum value
+type RenameEnumRequest struct {
+	BaseCommand
+	EnumValueID uuid.UUID `json:"enumValueId"`
+	Name        string    `json:"name"`
+}
+
+// DeleteEnumRequest represents request for deleting enum value
+type DeleteEnumRequest struct {
+	BaseCommand
+	EnumValueID uuid.UUID `json:"enumValueId"`
+}
+
+// RestoreEnumRequest represents request for restoring enum value
+type RestoreEnumRequest struct {
+	BaseCommand
+	EnumValueID uuid.UUID `json:"enumValueId"`
+}
+
+// ========== Opening Hours ==========
+
+// CreateOpeningHoursRequest represents request for creating opening hours
+type CreateOpeningHoursRequest struct {
+	BaseCommand
+	Name string `json:"name"`
+}
+
+// SetWorkPeriodRequest represents request for setting work period
+type SetWorkPeriodRequest struct {
+	BaseCommand
+	DayOfWeek int    `json:"dayOfWeek"`
+	StartTime string `json:"startTime"`
+	EndTime   string `json:"endTime"`
+}
+
+// OpeningHoursDto represents opening hours data
+type OpeningHoursDto struct {
+	ID          uuid.UUID       `json:"id"`
+	Name        string          `json:"name"`
+	IsDeleted   bool            `json:"isDeleted"`
+	IsArchived  bool            `json:"isArchived"`
+	WorkPeriods []WorkPeriodDto `json:"workPeriods,omitempty"`
+}
+
+// WorkPeriodDto represents work period data
+type WorkPeriodDto struct {
+	DayOfWeek int    `json:"dayOfWeek"`
+	StartTime string `json:"startTime"`
+	EndTime   string `json:"endTime"`
+}
+
+// OpeningHoursListDto represents list of opening hours
+type OpeningHoursListDto struct {
+	Total  int64             `json:"total"`
+	Values []OpeningHoursDto `json:"values"`
+}
+
+// ========== POS ==========
+
+// CreatePosRequest represents request for creating a POS
+type CreatePosRequest struct {
+	BaseCommand
+	Name    string    `json:"name"`
+	StoreID uuid.UUID `json:"storeId"`
+}
+
+// SetPosTypeRequest represents request for setting POS type
+type SetPosTypeRequest struct {
+	BaseCommand
+	PosTypeID *uuid.UUID `json:"posTypeId,omitempty"`
+}
+
+// SetPosAuthorizationRequest represents request for setting POS authorization
+type SetPosAuthorizationRequest struct {
+	BaseCommand
+	Login    string `json:"login"`
+	Password string `json:"password"`
+}
+
+// MoveToStoreRequest represents request for moving POS to store
+type MoveToStoreRequest struct {
+	BaseCommand
+	StoreID uuid.UUID `json:"storeId"`
+}
+
+// BlockPosRequest represents request for blocking POS
+type BlockPosRequest struct {
+	BaseCommand
+}
+
+// UnblockPosRequest represents request for unblocking POS
+type UnblockPosRequest struct {
+	BaseCommand
+}
+
+// PosDto represents POS data
+type PosDto struct {
+	ID         uuid.UUID  `json:"id"`
+	Name       string     `json:"name"`
+	StoreID    uuid.UUID  `json:"storeId"`
+	PosTypeID  *uuid.UUID `json:"posTypeId,omitempty"`
+	IsBlocked  bool       `json:"isBlocked"`
+	IsDeleted  bool       `json:"isDeleted"`
+	IsArchived bool       `json:"isArchived"`
+}
+
+// PosListDto represents list of POSes
+type PosListDto struct {
+	Total  int64    `json:"total"`
+	Values []PosDto `json:"values"`
+}
+
+// ========== POS Type ==========
+
+// CreatePosTypeRequest represents request for creating a POS type
+type CreatePosTypeRequest struct {
+	BaseCommand
+	Name string `json:"name"`
+}
+
+// PosTypeDto represents POS type data
+type PosTypeDto struct {
+	ID         uuid.UUID `json:"id"`
+	Name       string    `json:"name"`
+	IsDeleted  bool      `json:"isDeleted"`
+	IsArchived bool      `json:"isArchived"`
+}
+
+// PosTypeListDto represents list of POS types
+type PosTypeListDto struct {
+	Total  int64        `json:"total"`
+	Values []PosTypeDto `json:"values"`
+}

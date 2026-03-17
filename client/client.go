@@ -35,11 +35,32 @@ type Client struct {
 	httpClient *http.Client
 
 	// Services
-	Accounts     *AccountsService
-	Countries    *CountriesService
-	Currencies   *CurrenciesService
-	Customers    *CustomersService
-	LoyaltyCards *LoyaltyCardsService
+	Accounts                    *AccountsService
+	Countries                   *CountriesService
+	Currencies                  *CurrenciesService
+	Customers                   *CustomersService
+	LoyaltyCards                *LoyaltyCardsService
+	CustomerCards               *CustomerCardsService
+	CustomerProperty            *CustomerPropertyService
+	CustomerSegment             *CustomerSegmentService
+	ExternalGiftCardSeries      *ExternalGiftCardSeriesService
+	ExternalLoyaltyCardSeries   *ExternalLoyaltyCardSeriesService
+	ExternalSponsoredCardSeries *ExternalSponsoredCardSeriesService
+	GiftCards                   *GiftCardService
+	GiftCardBlockReason         *GiftCardBlockReasonService
+	GiftCardGroup               *GiftCardGroupService
+	GiftCardIssueReason         *GiftCardIssueReasonService
+	Items                       *ItemService
+	ItemCategories              *ItemCategoryService
+	ItemGroups                  *ItemGroupService
+	ItemProperties              *ItemPropertyService
+	LoyaltyCardBlockReason      *LoyaltyCardBlockReasonService
+	LoyaltyCardGroup            *LoyaltyCardGroupService
+	LoyaltyCardIssueReason      *LoyaltyCardIssueReasonService
+	ManualAccrualReason         *ManualAccrualReasonService
+	OpeningHours                *OpeningHoursService
+	Pos                         *PosService
+	PosType                     *PosTypeService
 }
 
 // NewClient creates a new RS Loyalty API client
@@ -66,6 +87,27 @@ func NewClient(config *Config) *Client {
 	c.Currencies = &CurrenciesService{client: c}
 	c.Customers = &CustomersService{client: c}
 	c.LoyaltyCards = &LoyaltyCardsService{client: c}
+	c.CustomerCards = &CustomerCardsService{client: c}
+	c.CustomerProperty = &CustomerPropertyService{client: c}
+	c.CustomerSegment = &CustomerSegmentService{client: c}
+	c.ExternalGiftCardSeries = &ExternalGiftCardSeriesService{client: c}
+	c.ExternalLoyaltyCardSeries = &ExternalLoyaltyCardSeriesService{client: c}
+	c.ExternalSponsoredCardSeries = &ExternalSponsoredCardSeriesService{client: c}
+	c.GiftCards = &GiftCardService{client: c}
+	c.GiftCardBlockReason = &GiftCardBlockReasonService{client: c}
+	c.GiftCardGroup = &GiftCardGroupService{client: c}
+	c.GiftCardIssueReason = &GiftCardIssueReasonService{client: c}
+	c.Items = &ItemService{client: c}
+	c.ItemCategories = &ItemCategoryService{client: c}
+	c.ItemGroups = &ItemGroupService{client: c}
+	c.ItemProperties = &ItemPropertyService{client: c}
+	c.LoyaltyCardBlockReason = &LoyaltyCardBlockReasonService{client: c}
+	c.LoyaltyCardGroup = &LoyaltyCardGroupService{client: c}
+	c.LoyaltyCardIssueReason = &LoyaltyCardIssueReasonService{client: c}
+	c.ManualAccrualReason = &ManualAccrualReasonService{client: c}
+	c.OpeningHours = &OpeningHoursService{client: c}
+	c.Pos = &PosService{client: c}
+	c.PosType = &PosTypeService{client: c}
 
 	return c
 }
