@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/rsl6/loyalty-client/models"
+	"github.com/rsl6/rsloyalty/models"
 )
 
 // Loyalty card handlers
@@ -525,4 +525,20 @@ func (s *Server) handleGetTransactions(w http.ResponseWriter, r *http.Request) {
 	}
 
 	s.writeJSON(w, response)
+}
+
+func (s *Server) handleAccountsBatch(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		s.writeError(w, http.StatusMethodNotAllowed, "Method not allowed")
+		return
+	}
+
+	var req models.BatchRequest
+	if err := s.readJSON(r, &req); err != nil {
+		s.writeError(w, http.StatusBadRequest, "Invalid request body")
+		return
+	}
+
+	// In mock, we just accept the batch request without processing individual commands
+	w.WriteHeader(http.StatusOK)
 }

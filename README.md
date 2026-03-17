@@ -1,11 +1,11 @@
-# RS Loyalty API Client
+# RSLoyalty
 
 Go-клиент для работы с RS Loyalty API v2. Библиотека предоставляет удобный интерфейс для интеграции с системой лояльности.
 
 ## Установка
 
 ```bash
-go get github.com/rsl6/loyalty-client
+go get github.com/rsl6/rsloyalty
 ```
 
 ## Быстрый старт
@@ -19,8 +19,8 @@ import (
     "log"
 
     "github.com/google/uuid"
-    "github.com/rsl6/loyalty-client/client"
-    "github.com/rsl6/loyalty-client/models"
+    "github.com/rsl6/rsloyalty/client"
+    "github.com/rsl6/rsloyalty/models"
 )
 
 func main() {
@@ -255,6 +255,48 @@ err := c.Currencies.Activate(ctx, &models.ActivateCurrencyRequest{
 err := c.Currencies.Deactivate(ctx, &models.DeactivateCurrencyRequest{
     BaseCommand: models.BaseCommand{ID: currencyID},
 }, nil)
+
+// Установить публичное имя валюты
+err := c.Currencies.SetPublicName(ctx, &models.SetCurrencyPublicNameRequest{
+    BaseCommand: models.BaseCommand{ID: currencyID},
+    PublicName:  "Бонусные очки",
+}, nil)
+
+// Установить правило округления
+err := c.Currencies.SetCalculateRoundRule(ctx, &models.SetCurrencyCalculateRoundRuleRequest{
+    BaseCommand:        models.BaseCommand{ID: currencyID},
+    CalculateRoundRule: "RoundUp",
+}, nil)
+
+// Установить caption валюты
+err := c.Currencies.SetCaption(ctx, &models.SetCurrencyCaptionRequest{
+    BaseCommand: models.BaseCommand{ID: currencyID},
+    Caption:     "pts",
+}, nil)
+```
+
+### Batch-операции
+
+Для выполнения нескольких операций за один запрос можно использовать batch-методы:
+
+```go
+// Batch для валют
+err := c.Currencies.Batch(ctx, &models.BatchRequest{
+    Commands: []interface{}{
+        map[string]interface{}{"type": "create", "data": {...}},
+        map[string]interface{}{"type": "activate", "data": {...}},
+    },
+}, nil)
+
+// Batch для стран
+err := c.Countries.Batch(ctx, &models.BatchRequest{
+    Commands: []interface{}{...},
+}, nil)
+
+// Batch для счетов
+err := c.Accounts.Batch(ctx, &models.BatchRequest{
+    Commands: []interface{}{...},
+}, nil)
 ```
 
 ## Конфигурация клиента
@@ -338,8 +380,8 @@ import (
     "net/http/httptest"
     "testing"
 
-    "github.com/rsl6/loyalty-client/client"
-    "github.com/rsl6/loyalty-client/mock"
+    "github.com/rsl6/rsloyalty/client"
+    "github.com/rsl6/rsloyalty/mock"
 )
 
 func TestMyFeature(t *testing.T) {

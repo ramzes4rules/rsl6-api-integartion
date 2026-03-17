@@ -10,7 +10,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/rsl6/loyalty-client/models"
+	"github.com/rsl6/rsloyalty/models"
 )
 
 // Config represents client configuration

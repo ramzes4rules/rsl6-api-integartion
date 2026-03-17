@@ -3,7 +3,7 @@ package mock
 import (
 	"net/http"
 
-	"github.com/rsl6/loyalty-client/models"
+	"github.com/rsl6/rsloyalty/models"
 )
 
 // Customer handlers

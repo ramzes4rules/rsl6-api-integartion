@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/google/uuid"
-	"github.com/rsl6/loyalty-client/models"
+	"github.com/rsl6/rsloyalty/models"
 )
 
 // LoyaltyCardsService handles loyalty card-related operations

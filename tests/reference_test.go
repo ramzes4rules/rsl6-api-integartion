@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/rsl6/loyalty-client/models"
+	"github.com/rsl6/rsloyalty/models"
 )
 
 func TestCountries_GetByID(t *testing.T) {
@@ -227,4 +227,109 @@ func TestCurrencies_ActivateDeactivate(t *testing.T) {
 	currency, err = ctx.Client.Currencies.GetByID(context.Background(), newCurrencyID)
 	require.NoError(t, err)
 	assert.False(t, currency.IsActive)
+}
+
+func TestCurrencies_SetPublicName(t *testing.T) {
+	ctx := SetupTestContext(t)
+	defer ctx.Cleanup()
+
+	currencyID := uuid.MustParse("33333333-3333-3333-3333-333333333333")
+
+	req := &models.SetCurrencyPublicNameRequest{
+		BaseCommand: models.BaseCommand{ID: currencyID},
+		PublicName:  "Бонусные очки",
+	}
+	err := ctx.Client.Currencies.SetPublicName(context.Background(), req, nil)
+	require.NoError(t, err)
+
+	currency, err := ctx.Client.Currencies.GetByID(context.Background(), currencyID)
+	require.NoError(t, err)
+	assert.NotNil(t, currency.PublicName)
+	assert.Equal(t, "Бонусные очки", *currency.PublicName)
+}
+
+func TestCurrencies_SetCalculateRoundRule(t *testing.T) {
+	ctx := SetupTestContext(t)
+	defer ctx.Cleanup()
+
+	currencyID := uuid.MustParse("33333333-3333-3333-3333-333333333333")
+
+	req := &models.SetCurrencyCalculateRoundRuleRequest{
+		BaseCommand:        models.BaseCommand{ID: currencyID},
+		CalculateRoundRule: "RoundUp",
+	}
+	err := ctx.Client.Currencies.SetCalculateRoundRule(context.Background(), req, nil)
+	require.NoError(t, err)
+}
+
+func TestCurrencies_SetCaption(t *testing.T) {
+	ctx := SetupTestContext(t)
+	defer ctx.Cleanup()
+
+	currencyID := uuid.MustParse("33333333-3333-3333-3333-333333333333")
+
+	req := &models.SetCurrencyCaptionRequest{
+		BaseCommand: models.BaseCommand{ID: currencyID},
+		Caption:     "Points",
+	}
+	err := ctx.Client.Currencies.SetCaption(context.Background(), req, nil)
+	require.NoError(t, err)
+}
+
+func TestCurrencies_Batch(t *testing.T) {
+	ctx := SetupTestContext(t)
+	defer ctx.Cleanup()
+
+	req := &models.BatchRequest{
+		Commands: []interface{}{
+			map[string]interface{}{
+				"type": "create",
+				"data": map[string]interface{}{
+					"id":   uuid.New().String(),
+					"name": "BATCH_CURRENCY",
+				},
+			},
+		},
+	}
+	err := ctx.Client.Currencies.Batch(context.Background(), req, nil)
+	require.NoError(t, err)
+}
+
+func TestCountries_Batch(t *testing.T) {
+	ctx := SetupTestContext(t)
+	defer ctx.Cleanup()
+
+	req := &models.BatchRequest{
+		Commands: []interface{}{
+			map[string]interface{}{
+				"type": "create",
+				"data": map[string]interface{}{
+					"id":   uuid.New().String(),
+					"code": "FR",
+				},
+			},
+		},
+	}
+	err := ctx.Client.Countries.Batch(context.Background(), req, nil)
+	require.NoError(t, err)
+}
+
+func TestAccounts_Batch(t *testing.T) {
+	ctx := SetupTestContext(t)
+	defer ctx.Cleanup()
+
+	req := &models.BatchRequest{
+		Commands: []interface{}{
+			map[string]interface{}{
+				"type": "accrual_to_customer",
+				"data": map[string]interface{}{
+					"customerId": "11111111-1111-1111-1111-111111111111",
+					"currencyId": "33333333-3333-3333-3333-333333333333",
+					"amount":     10.0,
+				},
+			},
+		},
+	}
+	err := ctx.Client.Accounts.Batch(context.Background(), req, nil)
+	require.NoError(t, err)
 }

@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/rsl6/loyalty-client/models"
+	"github.com/rsl6/rsloyalty/models"
 )
 
 // Server represents mock API server
@@ -74,6 +74,7 @@ func (s *Server) registerRoutes() {
 	s.mux.HandleFunc("/api/v2/countries/set_code", s.handleSetCountryCode)
 	s.mux.HandleFunc("/api/v2/countries/delete", s.handleDeleteCountry)
 	s.mux.HandleFunc("/api/v2/countries/restore", s.handleRestoreCountry)
+	s.mux.HandleFunc("/api/v2/countries/batch", s.handleCountriesBatch)
 
 	// Currencies endpoints
 	s.mux.HandleFunc("/api/v2/currencies/get_by_id", s.handleGetCurrencyByID)
@@ -81,11 +82,15 @@ func (s *Server) registerRoutes() {
 	s.mux.HandleFunc("/api/v2/currencies/create", s.handleCreateCurrency)
 	s.mux.HandleFunc("/api/v2/currencies/rename", s.handleRenameCurrency)
 	s.mux.HandleFunc("/api/v2/currencies/set_description", s.handleSetCurrencyDescription)
+	s.mux.HandleFunc("/api/v2/currencies/set_public_name", s.handleSetCurrencyPublicName)
 	s.mux.HandleFunc("/api/v2/currencies/set_rate", s.handleSetCurrencyRate)
+	s.mux.HandleFunc("/api/v2/currencies/set_calculate_round_rule", s.handleSetCurrencyCalculateRoundRule)
+	s.mux.HandleFunc("/api/v2/currencies/set_caption", s.handleSetCurrencyCaption)
 	s.mux.HandleFunc("/api/v2/currencies/activate", s.handleActivateCurrency)
 	s.mux.HandleFunc("/api/v2/currencies/deactivate", s.handleDeactivateCurrency)
 	s.mux.HandleFunc("/api/v2/currencies/delete", s.handleDeleteCurrency)
 	s.mux.HandleFunc("/api/v2/currencies/restore", s.handleRestoreCurrency)
+	s.mux.HandleFunc("/api/v2/currencies/batch", s.handleCurrenciesBatch)
 
 	// Loyalty cards endpoints
 	s.mux.HandleFunc("/api/v2/loyalty_cards/get_by_id", s.handleGetLoyaltyCardByID)
@@ -105,6 +110,7 @@ func (s *Server) registerRoutes() {
 	s.mux.HandleFunc("/api/v2/accounts/subtract_from_customer", s.handleSubtractFromCustomer)
 	s.mux.HandleFunc("/api/v2/accounts/subtract_from_loyalty_card", s.handleSubtractFromLoyaltyCard)
 	s.mux.HandleFunc("/api/v2/accounts/get_transactions", s.handleGetTransactions)
+	s.mux.HandleFunc("/api/v2/accounts/batch", s.handleAccountsBatch)
 }
 
 func (s *Server) seedTestData() {

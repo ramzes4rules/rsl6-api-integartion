@@ -3,7 +3,7 @@ package mock
 import (
 	"net/http"
 
-	"github.com/rsl6/loyalty-client/models"
+	"github.com/rsl6/rsloyalty/models"
 )
 
 // Country handlers
@@ -405,5 +405,112 @@ func (s *Server) handleRestoreCurrency(w http.ResponseWriter, r *http.Request) {
 	}
 
 	currency.IsDeleted = false
+	w.WriteHeader(http.StatusOK)
+}
+
+func (s *Server) handleSetCurrencyPublicName(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		s.writeError(w, http.StatusMethodNotAllowed, "Method not allowed")
+		return
+	}
+
+	var req models.SetCurrencyPublicNameRequest
+	if err := s.readJSON(r, &req); err != nil {
+		s.writeError(w, http.StatusBadRequest, "Invalid request body")
+		return
+	}
+
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	currency, ok := s.currencies[req.ID]
+	if !ok {
+		s.writeError(w, http.StatusNotFound, "Currency not found")
+		return
+	}
+
+	currency.PublicName = &req.PublicName
+	w.WriteHeader(http.StatusOK)
+}
+
+func (s *Server) handleSetCurrencyCalculateRoundRule(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		s.writeError(w, http.StatusMethodNotAllowed, "Method not allowed")
+		return
+	}
+
+	var req models.SetCurrencyCalculateRoundRuleRequest
+	if err := s.readJSON(r, &req); err != nil {
+		s.writeError(w, http.StatusBadRequest, "Invalid request body")
+		return
+	}
+
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	_, ok := s.currencies[req.ID]
+	if !ok {
+		s.writeError(w, http.StatusNotFound, "Currency not found")
+		return
+	}
+
+	// Note: CalculateRoundRule is not stored in CurrencyDto in this mock
+	w.WriteHeader(http.StatusOK)
+}
+
+func (s *Server) handleSetCurrencyCaption(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		s.writeError(w, http.StatusMethodNotAllowed, "Method not allowed")
+		return
+	}
+
+	var req models.SetCurrencyCaptionRequest
+	if err := s.readJSON(r, &req); err != nil {
+		s.writeError(w, http.StatusBadRequest, "Invalid request body")
+		return
+	}
+
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	_, ok := s.currencies[req.ID]
+	if !ok {
+		s.writeError(w, http.StatusNotFound, "Currency not found")
+		return
+	}
+
+	// Note: Caption is not stored in CurrencyDto in this mock
+	w.WriteHeader(http.StatusOK)
+}
+
+func (s *Server) handleCurrenciesBatch(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		s.writeError(w, http.StatusMethodNotAllowed, "Method not allowed")
+		return
+	}
+
+	var req models.BatchRequest
+	if err := s.readJSON(r, &req); err != nil {
+		s.writeError(w, http.StatusBadRequest, "Invalid request body")
+		return
+	}
+
+	// In mock, we just accept the batch request without processing individual commands
+	w.WriteHeader(http.StatusOK)
+}
+
+func (s *Server) handleCountriesBatch(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		s.writeError(w, http.StatusMethodNotAllowed, "Method not allowed")
+		return
+	}
+
+	var req models.BatchRequest
+	if err := s.readJSON(r, &req); err != nil {
+		s.writeError(w, http.StatusBadRequest, "Invalid request body")
+		return
+	}
+
+	// In mock, we just accept the batch request without processing individual commands
 	w.WriteHeader(http.StatusOK)
 }

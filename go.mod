@@ -1,4 +1,4 @@
-module github.com/rsl6/loyalty-client
+module github.com/rsl6/rsloyalty
 
 go 1.21
 

@@ -396,6 +396,29 @@ type DisallowSubscriptionRequest struct {
 	SubscriptionType SubscriptionTypes `json:"subscriptionType"`
 }
 
+// SetCurrencyPublicNameRequest represents request for setting currency public name
+type SetCurrencyPublicNameRequest struct {
+	BaseCommand
+	PublicName string `json:"publicName"`
+}
+
+// SetCurrencyCalculateRoundRuleRequest represents request for setting currency calculate round rule
+type SetCurrencyCalculateRoundRuleRequest struct {
+	BaseCommand
+	CalculateRoundRule string `json:"calculateRoundRule"`
+}
+
+// SetCurrencyCaptionRequest represents request for setting currency caption
+type SetCurrencyCaptionRequest struct {
+	BaseCommand
+	Caption string `json:"caption"`
+}
+
+// BatchRequest represents batch request for executing multiple commands
+type BatchRequest struct {
+	Commands []interface{} `json:"commands"`
+}
+
 // RequestHeaders represents common request headers
 type RequestHeaders struct {
 	CommandID          *string `json:"command-id,omitempty"`

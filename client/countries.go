@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/google/uuid"
-	"github.com/rsl6/loyalty-client/models"
+	"github.com/rsl6/rsloyalty/models"
 )
 
 // CountriesService handles country-related operations
@@ -52,4 +52,9 @@ func (s *CountriesService) GetList(ctx context.Context, req *models.GetListReque
 		return nil, err
 	}
 	return &response, nil
+}
+
+// Batch executes batch operations for countries
+func (s *CountriesService) Batch(ctx context.Context, req *models.BatchRequest, headers *models.RequestHeaders) error {
+	return s.client.doCommand(ctx, "/api/v2/countries/batch", req, headers)
 }

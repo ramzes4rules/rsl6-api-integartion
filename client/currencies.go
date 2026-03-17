@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/google/uuid"
-	"github.com/rsl6/loyalty-client/models"
+	"github.com/rsl6/rsloyalty/models"
 )
 
 // CurrenciesService handles currency-related operations
@@ -28,9 +28,24 @@ func (s *CurrenciesService) SetDescription(ctx context.Context, req *models.SetC
 	return s.client.doCommand(ctx, "/api/v2/currencies/set_description", req, headers)
 }
 
+// SetPublicName sets the currency public name
+func (s *CurrenciesService) SetPublicName(ctx context.Context, req *models.SetCurrencyPublicNameRequest, headers *models.RequestHeaders) error {
+	return s.client.doCommand(ctx, "/api/v2/currencies/set_public_name", req, headers)
+}
+
 // SetRate sets the currency rate
 func (s *CurrenciesService) SetRate(ctx context.Context, req *models.SetCurrencyRateRequest, headers *models.RequestHeaders) error {
 	return s.client.doCommand(ctx, "/api/v2/currencies/set_rate", req, headers)
+}
+
+// SetCalculateRoundRule sets the currency calculate round rule
+func (s *CurrenciesService) SetCalculateRoundRule(ctx context.Context, req *models.SetCurrencyCalculateRoundRuleRequest, headers *models.RequestHeaders) error {
+	return s.client.doCommand(ctx, "/api/v2/currencies/set_calculate_round_rule", req, headers)
+}
+
+// SetCaption sets the currency caption
+func (s *CurrenciesService) SetCaption(ctx context.Context, req *models.SetCurrencyCaptionRequest, headers *models.RequestHeaders) error {
+	return s.client.doCommand(ctx, "/api/v2/currencies/set_caption", req, headers)
 }
 
 // Activate activates a currency
@@ -74,4 +89,9 @@ func (s *CurrenciesService) GetList(ctx context.Context, req *models.GetListRequ
 		return nil, err
 	}
 	return &response, nil
+}
+
+// Batch executes batch operations for currencies
+func (s *CurrenciesService) Batch(ctx context.Context, req *models.BatchRequest, headers *models.RequestHeaders) error {
+	return s.client.doCommand(ctx, "/api/v2/currencies/batch", req, headers)
 }

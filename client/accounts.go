@@ -4,7 +4,7 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/rsl6/loyalty-client/models"
+	"github.com/rsl6/rsloyalty/models"
 )
 
 // AccountsService handles account-related operations
@@ -40,4 +40,9 @@ func (s *AccountsService) GetTransactions(ctx context.Context, req *models.GetTr
 		return nil, err
 	}
 	return &response, nil
+}
+
+// Batch executes batch operations for accounts
+func (s *AccountsService) Batch(ctx context.Context, req *models.BatchRequest, headers *models.RequestHeaders) error {
+	return s.client.doCommand(ctx, "/api/v2/accounts/batch", req, headers)
 }

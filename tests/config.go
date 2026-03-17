@@ -6,8 +6,8 @@ import (
 	"os"
 	"testing"
 
-	"github.com/rsl6/loyalty-client/client"
-	"github.com/rsl6/loyalty-client/mock"
+	"github.com/rsl6/rsloyalty/client"
+	"github.com/rsl6/rsloyalty/mock"
 )
 
 // TestConfig holds test configuration
