@@ -1,4 +1,4 @@
-module github.com/rsl6/rsloyalty
+module github.com/rsl_itegration_api
 
 go 1.21
 
