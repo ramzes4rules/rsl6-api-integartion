@@ -4,7 +4,7 @@ package client
 import (
 	"context"
 
-	"github.com/rsl6/rsloyalty/models"
+	"github.com/ramzes4rules/rsl6-integration-api/models"
 )
 
 // CustomerCardsService handles customer cards operations

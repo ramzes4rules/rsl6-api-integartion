@@ -6,8 +6,8 @@ import (
 	"os"
 	"testing"
 
-	"github.com/rsl6/rsloyalty/client"
-	"github.com/rsl6/rsloyalty/mock"
+	"github.com/ramzes4rules/rsl6-integration-api/client"
+	"github.com/ramzes4rules/rsl6-integration-api/mock"
 )
 
 // TestConfig holds test configuration

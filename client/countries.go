@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/google/uuid"
-	"github.com/rsl6/rsloyalty/models"
+	"github.com/ramzes4rules/rsl6-integration-api/models"
 )
 
 // CountriesService handles country-related operations
